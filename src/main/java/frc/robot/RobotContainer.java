@@ -19,11 +19,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private final XboxController controller = new XboxController(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+      m_subsystem.setDefaultCommand(new ExampleCommand(m_exampleSubsystem, controller::getLeftY, controller::getLeftX, controller::getRightX));
     // Configure the button bindings
     configureButtonBindings();
   }
