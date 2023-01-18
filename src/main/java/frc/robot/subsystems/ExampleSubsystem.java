@@ -5,26 +5,29 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
+
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import frc.robot.Constants;
 
 
 public class ExampleSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-    private final PWMVictorSPX frontLeft;
-    private final PWMVictorSPX frontRight;
-    private final PWMVictorSPX backLeft;
-    private final PWMVictorSPX backRight;
-    private final MecanumDrive drive;
+    private final TalonSRX frontLeft;
+    private final TalonSRX frontRight;
+    private final TalonSRX backLeft;
+    private final TalonSRX backRight;
 
   public ExampleSubsystem(){
-   frontLeft = new PWMVictorSPX(3);
-   frontRight = new PWMVictorSPX(1);
-   backLeft = new PWMVictorSPX(6);
-   backRight = new PWMVictorSPX(7);
-   drive = new MecanumDrive (frontLeft, backLeft, frontRight, backRight);
+   frontLeft = new TalonSRX(Constants.DriveBase.FRONT_LEFT);
+   frontRight = new TalonSRX(Constants.DriveBase.FRONT_RIGHT);
+   backLeft = new TalonSRX(Constants.DriveBase.BACK_LEFT);
+   backRight = new TalonSRX(Constants.DriveBase.BACK_RIGHT);
   }
-  public void driveMecanum(double ySpeed, double xSpeed, double zRotation){
+  public void 
+
+
+  
+  driveMecanum(double ySpeed, double xSpeed, double zRotation){
     drive.driveCartesian(ySpeed, xSpeed, zRotation);
   }
 
