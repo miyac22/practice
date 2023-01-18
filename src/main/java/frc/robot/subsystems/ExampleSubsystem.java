@@ -6,7 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.Constants;
 
 
@@ -22,13 +23,14 @@ public class ExampleSubsystem extends SubsystemBase {
    frontRight = new TalonSRX(Constants.DriveBase.FRONT_RIGHT);
    backLeft = new TalonSRX(Constants.DriveBase.BACK_LEFT);
    backRight = new TalonSRX(Constants.DriveBase.BACK_RIGHT);
+   frontRight.setInverted(true);
+   backRight.setInverted(true);
   }
-  public void 
-
-
-  
-  driveMecanum(double ySpeed, double xSpeed, double zRotation){
-    drive.driveCartesian(ySpeed, xSpeed, zRotation);
+  public void drive(double ySpeed){
+    frontLeft.set(ControlMode.PercentOutput, ySpeed);
+    backLeft.set(ControlMode.PercentOutput, ySpeed);
+    frontRight.set(ControlMode.PercentOutput, ySpeed);
+    backRight.set(ControlMode.PercentOutput, ySpeed);
   }
 
   @Override

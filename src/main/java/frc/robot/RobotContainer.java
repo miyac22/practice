@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -23,7 +22,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-      m_subsystem.setDefaultCommand(new ExampleCommand(m_exampleSubsystem, controller::getLeftY, controller::getLeftX, controller::getRightX));
+      m_exampleSubsystem.setDefaultCommand(new ExampleCommand(m_exampleSubsystem, controller::getLeftY));
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -34,15 +33,18 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    // new Button(controller::getAButton).whileHeld(new ExampleCommand(m_exampleSubsystem, 24));
+    // new Button(controller::getBButton).whileHeld(new ExampleCommand(m_exampleSubsystem, 0));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
-  }
+  // public Command getAutonomousCommand() {
+  //   // An ExampleCommand will run in autonomous
+  //   return m_autoCommand;
+  // }
 }
