@@ -12,12 +12,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
 /** An example command that uses an example subsystem. */
-public class ExampleCommand extends CommandBase {
+public class InvertCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private  ExampleSubsystem m_subsystem;
-  private  double ySpeed; 
-  private  double xSpeed;
-  private  double zRotation;
+  private  ExampleSubsystem subsystem;
+  
 
 
   /**
@@ -25,25 +23,22 @@ public class ExampleCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(ExampleSubsystem subsystem, DoubleSupplier y, DoubleSupplier x, DoubleSupplier z) {
-    m_subsystem = subsystem;
-    this.ySpeed = y.getAsDouble();
-    this.xSpeed = x.getAsDouble();
-    this.zRotation = z.getAsDouble();
-    // Use addRequirements() here to declare subsystem dependencies.
+  public InvertCommand(ExampleSubsystem subsystem) {
+    this.subsystem = subsystem;
+    
+    // Used Requirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
-
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    subsystem.invertedmotor();
   }
   
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.driveMecanum(ySpeed,xSpeed,zRotation);
+    
   }
   
   // Called once the command ends or is interrupted.
