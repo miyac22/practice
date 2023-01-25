@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  
+  private final XboxController controller = new XboxController(0);
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
@@ -34,7 +36,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    new Button(controller::getXButton).whenPressed(new ExampleCommand(m_exampleSubsystem_));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
