@@ -10,18 +10,25 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class ArmSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
     private final TalonFX arm;
+    private final ShuffleboardTab ArmTab = Shuffleboard.getTab("ArmTab");
     private PIDController pidController;
     private double desiredAngle;
    
+  
   public ArmSubsystem(){
    arm = new TalonFX(13);
    pidController = new PIDController(0.003, 0, 0.001);
+   ArmTab.add("pid", pidController);
+   ArmTab.addNumber("Desired Angle", this::getTargetAngle);
+   ArmTab.addNumber("Current Angle", this::getAngle);
 
    arm.setNeutralMode(NeutralMode.Brake);
   }
@@ -40,8 +47,8 @@ public class ArmSubsystem extends SubsystemBase {
   
   @Override
   public void periodic() {
-    final double pidOutput = MathUtil.clamp(pidController.calculate(getAngle(), desiredAngle), -0.1, 0.1);
-    arm.set(TalonFXControlMode.PercentOutput, pidOutput);
+    final double pidOutput = pidController.calculate(getAngle(), desiredAngle);
+    arm.set(TalonFXControlMode.PercentOutput, MathUtil.clamp(pidOutput, -0.1, 0.1));
     // This method will be called once per scheduler run
   }
 
