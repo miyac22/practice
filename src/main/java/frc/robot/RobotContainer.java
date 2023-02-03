@@ -8,9 +8,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.ArmCommand;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ArmOtherCommand;
+import frc.robot.commands.DrivebaseCommand;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.DrivebaseSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,14 +21,15 @@ import frc.robot.subsystems.ExampleSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final XboxController controller = new XboxController(0);
+  
+  private final DrivebaseSubsystem m_exampleSubsystem = new DrivebaseSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-      m_exampleSubsystem.setDefaultCommand(new ExampleCommand(m_exampleSubsystem, controller::getLeftY));
+      m_exampleSubsystem.setDefaultCommand(new DrivebaseCommand(m_exampleSubsystem, controller::getLeftY));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -41,7 +43,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // new Button(controller::getAButton).whileHeld(new ExampleCommand(m_exampleSubsystem, 24));
-    new Button(controller::getBButton).whenPressed(new ArmCommand(m_armSubsystem, 2));
+    new Button(controller::getYButton).whenPressed(new ArmCommand(m_armSubsystem, 1024));
+    new Button(controller::getBButton).whenPressed(new ArmOtherCommand(m_armSubsystem, .5));
+    new Button(controller::getXButton).whenPressed(new ArmOtherCommand(m_armSubsystem, -.5));
   }
 
   /**

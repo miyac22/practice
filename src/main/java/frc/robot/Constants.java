@@ -19,5 +19,8 @@ public final class Constants {
         public static final int FRONT_RIGHT = 1;
         public static final int BACK_RIGHT = 7;
     }
+    public class Arm {
+        public static final int ARM = 13;
+    }
     
 }

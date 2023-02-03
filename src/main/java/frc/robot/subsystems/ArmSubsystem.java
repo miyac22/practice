@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Constants;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -15,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
+
 public class ArmSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
     private final TalonFX arm;
@@ -24,11 +28,14 @@ public class ArmSubsystem extends SubsystemBase {
    
   
   public ArmSubsystem(){
-   arm = new TalonFX(13);
+   arm = new TalonFX(Constants.Arm.ARM);
    pidController = new PIDController(0.003, 0, 0.001);
    ArmTab.add("pid", pidController);
-   ArmTab.addNumber("Desired Angle", this::getTargetAngle);
+   ArmTab.addNumber("Desired Angle", () -> desiredAngle);
    ArmTab.addNumber("Current Angle", this::getAngle);
+   // these are lambdas kind like use () -> bc its a variable and this:: bc its a method
+   // () -> means define a double supplier that uses this or something (parameters) -> {expression};?
+   // :: means using a method to get the number? idk something weirder maybe
 
    arm.setNeutralMode(NeutralMode.Brake);
   }
@@ -37,14 +44,14 @@ public class ArmSubsystem extends SubsystemBase {
     return arm.getSelectedSensorPosition();
   }
 
-  public double getTargetAngle() {
-    return desiredAngle;
-  }
-
   public void setAngle(double desiredAngle){
     this.desiredAngle = desiredAngle;
   }
   
+  public void move(double power){
+    arm.set(ControlMode.PercentOutput, power);
+  }
+
   @Override
   public void periodic() {
     final double pidOutput = pidController.calculate(getAngle(), desiredAngle);

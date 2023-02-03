@@ -4,16 +4,16 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.DoubleSupplier;
 
 /** An example command that uses an example subsystem. */
-public class ExampleCommand extends CommandBase {
+public class DrivebaseCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ExampleSubsystem m_subsystem;
+  private final DrivebaseSubsystem m_subsystem;
   private final DoubleSupplier ySpeed;
   private final ShuffleboardTab DriveBaseTab = Shuffleboard.getTab("DriveBaseTab");
 
@@ -23,7 +23,7 @@ public class ExampleCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(ExampleSubsystem subsystem, DoubleSupplier ySpeed) {
+  public DrivebaseCommand(DrivebaseSubsystem subsystem, DoubleSupplier ySpeed) {
     m_subsystem = subsystem;
     this.ySpeed = ySpeed;
     DriveBaseTab.addNumber("Speed", ySpeed);
