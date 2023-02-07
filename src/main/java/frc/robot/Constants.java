@@ -20,4 +20,8 @@ public final class Constants {
          public static final int BACK_RIGHT =7;
 
     }
+
+    public class Motor {
+        public static final int MOTOR_ID = 13;
+    }
 }
