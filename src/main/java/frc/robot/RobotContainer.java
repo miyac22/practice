@@ -6,7 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.robot.Autonomous.AutoCommand;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmOtherCommand;
 import frc.robot.commands.DrivebaseCommand;
@@ -25,6 +29,7 @@ public class RobotContainer {
   
   private final DrivebaseSubsystem m_exampleSubsystem = new DrivebaseSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+  private final SendableChooser<Command> autoSelector = new SendableChooser<>();
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -48,13 +53,31 @@ public class RobotContainer {
     new Button(controller::getXButton).whenPressed(new ArmOtherCommand(m_armSubsystem, -.5));
   }
 
+  private void setupAutonomousCommands(){
+    Shuffleboard.getTab("DriverView")
+        .addString("NOTES", () -> "...win?")
+        .withSize(3,1)
+        .withPosition(0,0);
+  
+  autoSelector.setDefaultOption(
+    "[NEW] AutoTest",
+    new AutoCommand(
+      m_armSubsystem, m_exampleSubsystem, 2,1
+    ));
+
+    Shuffleboard.getTab ("DriverView")
+      .add("auto selector", autoSelector)
+      .withSize (4,1)
+      .withPosition (7,0);
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   // An ExampleCommand will run in autonomous
-  //   return m_autoCommand;
-  // }
+  public Command getAutonomousCommand() {
+    // An ExampleCommand will run in autonomous
+    return autoSelector.getSelected();
+  }
 }
