@@ -4,28 +4,33 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.MotorSubsystem;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 
-public class MotorCommand extends CommandBase {
-  private MotorSubsystem motorSubsystem;
-  private double getTargetedAngle;
-  
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ExampleSubsystem;
+
+public class PathwayCommand extends CommandBase {
+  private ExampleSubsystem motorSubsystem;
+  private PathPlannerTrajectory path;
 
   /** Creates a new MotorCommand. */
-  public MotorCommand(MotorSubsystem subsystem, double getTargetedAngle) {
+  public PathwayCommand(ExampleSubsystem subsystem) {
+    path = PathPlanner.loadPath("auto test", 1, 1);
     this.motorSubsystem = subsystem;
-    this.getTargetedAngle =getTargetedAngle;
     addRequirements(motorSubsystem);
+
     
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
+  
+
+  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    motorSubsystem.setAngle(getTargetedAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
