@@ -20,8 +20,8 @@ public class SequentialCommand extends SequentialCommandGroup {
     mExampleSubsystem = subsystem;
     
 
-    addCommands(new ArmCommand(motorSubsystem, 5), new MotorCommand(motorSubsystem,0.5), 
-    new InvertCommand(mExampleSubsystem),new UninvertCommand(mExampleSubsystem),new PathwayCommand(mExampleSubsystem));
+    addCommands(new ArmCommand(motorSubsystem, 5), new MotorCommand(motorSubsystem,0.5)
+    ,new PathwayCommand(mExampleSubsystem));
 
     
 

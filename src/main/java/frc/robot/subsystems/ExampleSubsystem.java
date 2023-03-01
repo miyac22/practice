@@ -3,47 +3,38 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ExampleSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  private final TalonSRX frontLeft;
-  private final TalonSRX frontRight;
-  private final TalonSRX backLeft;
-  private final TalonSRX backRight;
+  private final WPI_TalonSRX frontLeft;
+  private final WPI_TalonSRX frontRight;
+  private final WPI_TalonSRX backLeft;
+  private final WPI_TalonSRX backRight;
+  private MecanumDrive driveMecanum; 
+  public enum Modes {
+    Intake,Outtake,Off,Eject,Retract,Deploy;
+  }
   
   
 
   public ExampleSubsystem() {
-  frontLeft = new TalonSRX(Constants.DriveBase.FRONT_LEFT);
-  frontRight = new TalonSRX(Constants.DriveBase.FRONT_RIGHT);
-  backLeft = new TalonSRX(Constants.DriveBase.BACK_LEFT);
-  backRight = new TalonSRX(Constants.DriveBase.BACK_RIGHT);
-  
-  
-
+  frontLeft = new WPI_TalonSRX(Constants.DriveBase.FRONT_LEFT);
+  frontRight = new WPI_TalonSRX(Constants.DriveBase.FRONT_RIGHT);
+  backLeft = new WPI_TalonSRX(Constants.DriveBase.BACK_LEFT);
+  backRight = new WPI_TalonSRX(Constants.DriveBase.BACK_RIGHT);
+   
+  driveMecanum = new MecanumDrive(frontLeft,backLeft,frontRight,backRight);
   }
+
   public void driveMecanum(double ySpeed, double xSpeed, double zRotation){
-  frontLeft.set(ControlMode.PercentOutput, ySpeed);
-  frontRight.set(ControlMode.PercentOutput,ySpeed);
-  backRight.set(ControlMode.PercentOutput,ySpeed);
-  backLeft.set(ControlMode.PercentOutput,ySpeed);
+  driveMecanum.driveCartesian(ySpeed, xSpeed, zRotation);
+
   //ControlMode sets the way the motor runs,PercentOutput it tells it to take a double and gives it a percentage to run at.
 
-  }
-   public void invertedmotor(){
-  frontLeft.setInverted(true);
-  backLeft.setInverted(true);
-  //inverts the motors
-   }
-
-  public void Uninvert(){
-    frontLeft.setInverted(false);
-    backLeft.setInverted(false);
-    //uninvert
   }
   
   @Override

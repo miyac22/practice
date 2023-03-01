@@ -4,15 +4,17 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.InvertCommand;
 import frc.robot.commands.MotorCommand;
 import frc.robot.commands.PathwayCommand;
-import frc.robot.commands.UninvertCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.MotorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,13 +34,22 @@ public class RobotContainer {
   private final ArmCommand m_ArmCommand = new ArmCommand(m_MotorSubsystem, 5);
   private final XboxController controller = new XboxController(0);
   private final ExampleCommand ExampleCommand = new ExampleCommand(m_exampleSubsystem, controller::getLeftY, controller::getLeftX, controller::getRightX);
-  private final SendableChooser autoSelector = new SendableChooser<>();
+  private final SendableChooser<Command> autoSelector = new SendableChooser<>();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
     m_exampleSubsystem.setDefaultCommand(ExampleCommand);
 
+  }
+  private void setupAutonomousCommands(){
+    autoSelector.setDefaultOption("[New] AutoTest", ExampleCommand);
+  
+  Shuffleboard.getTab("driveMecanum").add("auto selector",autoSelector).withSize(4,1).withPosition(7,0);
+  }
+  public Command getAutonomousCommand() {
+    // An ExampleCommand will run in autonomous
+    return autoSelector.getSelected();
   }
 
   /**
@@ -48,8 +59,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new Button(controller::getXButton).whenPressed(new InvertCommand(m_exampleSubsystem));
-    new Button(controller::getYButton).whenPressed(new UninvertCommand(m_exampleSubsystem));
     new Button (controller::getAButton).whenPressed (new MotorCommand(m_MotorSubsystem, 0.5));
     new Button (controller::getBButton).whenPressed (new ArmCommand(m_MotorSubsystem, 5));
   }
@@ -59,8 +68,5 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return null;
-  }
+  
 }
