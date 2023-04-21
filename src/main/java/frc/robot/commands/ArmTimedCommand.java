@@ -4,34 +4,31 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmOtherCommand extends CommandBase {
-  /** Creates a new ArmOtherCommand. */
+public class ArmTimedCommand extends CommandBase {
   private final ArmSubsystem m_armSubsystem;
-  private double power;
-  private double startTime;
-  
-  public ArmOtherCommand(ArmSubsystem subsystem, double power) {
-  this.m_armSubsystem = subsystem;
-  this.power = power;
-
+  private final double power;
+  private final double timeDuration;
+  /** Creates a new ArmAngleCommand. */
+  public ArmTimedCommand(ArmSubsystem subsystem, double power, double timeDuration) {
+    this.m_armSubsystem = subsystem;
+    this.power = power;
+    this.timeDuration = timeDuration;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = Timer.getFPGATimestamp();
+    m_armSubsystem.setTimed(power, timeDuration);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_armSubsystem.move(power);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -40,12 +37,6 @@ public class ArmOtherCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Timer.getFPGATimestamp() > startTime + 5)
-  {
-    return true;
-  }
-    else {
-      return false;
-  }
+    return false;
   }
 }

@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,8 +26,15 @@ public class ArmSubsystem extends SubsystemBase {
     private final ShuffleboardTab ArmTab = Shuffleboard.getTab("ArmTab");
     private PIDController pidController;
     private double desiredAngle;
-   
-  
+    private ArmModes mode;
+    private double power;
+    private double startTime;
+    private double timeDuration;
+
+  public enum ArmModes{
+    TIMED,
+    ANGLE
+  }
   public ArmSubsystem(){
    arm = new TalonFX(Constants.Arm.ARM);
    pidController = new PIDController(0.003, 0, 0.001);
@@ -40,23 +48,55 @@ public class ArmSubsystem extends SubsystemBase {
    arm.setNeutralMode(NeutralMode.Brake);
   }
 
+  public void timedPeriodic(){
+    arm.set(ControlMode.PercentOutput, power);
+    if (Timer.getFPGATimestamp() > startTime + timeDuration){
+      arm.set(ControlMode.PercentOutput, 0);
+      mode = ArmModes.ANGLE;
+    }
+  }
+  
+  public void anglePeriodic(){
+    final double pidOutput = pidController.calculate(getAngle(), desiredAngle);
+    arm.set(TalonFXControlMode.PercentOutput, MathUtil.clamp(pidOutput, -0.1, 0.1));
+  }
+
   public double getAngle(){
     return arm.getSelectedSensorPosition();
   }
 
   public void setAngle(double desiredAngle){
+    mode = ArmModes.ANGLE;
     this.desiredAngle = desiredAngle;
   }
-  
-  public void move(double power){
-    arm.set(ControlMode.PercentOutput, power);
+
+  public void setTimed(double power, double timeDuration){
+    mode = ArmModes.TIMED;
+    this.power = power;
+    this.timeDuration = timeDuration;
   }
+  
+  public ArmModes getMode(){
+    return mode;
+  }
+
+  public void setMode(ArmModes mode){
+    startTime = Timer.getFPGATimestamp();
+    this.mode = mode;
+  }
+
 
   @Override
   public void periodic() {
-    final double pidOutput = pidController.calculate(getAngle(), desiredAngle);
-    arm.set(TalonFXControlMode.PercentOutput, MathUtil.clamp(pidOutput, -0.1, 0.1));
-    // This method will be called once per scheduler run
+    switch(mode){
+      case TIMED:
+        timedPeriodic();
+        break;
+      case ANGLE:
+        anglePeriodic();
+        break;
+    }
+    // This pbmethod will be called once per scheduler run
   }
 
   @Override

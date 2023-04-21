@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.Autonomous.AutoCommand;
-import frc.robot.commands.ArmCommand;
-import frc.robot.commands.ArmOtherCommand;
+import frc.robot.commands.ArmAngleCommand;
+import frc.robot.commands.ArmTimedCommand;
 import frc.robot.commands.DrivebaseCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivebaseSubsystem;
@@ -48,9 +48,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // new Button(controller::getAButton).whileHeld(new ExampleCommand(m_exampleSubsystem, 24));
-    new Button(controller::getYButton).whenPressed(new ArmCommand(m_armSubsystem, 1024));
-    new Button(controller::getBButton).whenPressed(new ArmOtherCommand(m_armSubsystem, .5));
-    new Button(controller::getXButton).whenPressed(new ArmOtherCommand(m_armSubsystem, -.5));
+    new Button(controller::getYButton).whenPressed(new ArmAngleCommand(m_armSubsystem, 1024));
+    new Button(controller::getBButton).whenPressed(new ArmTimedCommand(m_armSubsystem, .5, 3));
+    new Button(controller::getXButton).whenPressed(new ArmTimedCommand(m_armSubsystem, -.5, 3));
   }
 
   private void setupAutonomousCommands(){

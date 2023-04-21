@@ -8,7 +8,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class ArmCommand extends CommandBase {
+public class ArmAngleCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_armSubsystem;
   private final double desiredAngle;
@@ -19,7 +19,7 @@ public class ArmCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmCommand(ArmSubsystem subsystem, double desiredAngle) {
+  public ArmAngleCommand(ArmSubsystem subsystem, double desiredAngle) {
     this.m_armSubsystem = subsystem;
     this.desiredAngle = desiredAngle;
     
@@ -30,6 +30,8 @@ public class ArmCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_armSubsystem.setAngle(desiredAngle); 
+//the set mode thing is in the method
   }
 
   // Called every time the scheduler runs while the command is scheduled.

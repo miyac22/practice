@@ -8,9 +8,11 @@ import edu.wpi.first.math.trajectory.constraint.MaxVelocityConstraint;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.ArmOtherCommand;
+import frc.robot.commands.ArmTimedCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivebaseSubsystem;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -22,11 +24,11 @@ public class AutoCommand extends SequentialCommandGroup {
   double maxAccelerationMetersPerSecond) {
     PathPlannerTrajectory triangle = 
         PathPlanner.loadPath(
-          "New Path", maxVelocityMetersPerSecond, maxAccelerationMetersPerSecond
+          "Triangle", maxVelocityMetersPerSecond, maxAccelerationMetersPerSecond
         );
     PathPlannerTrajectory star =
         PathPlanner.loadPath(
-          "New New Path", maxVelocityMetersPerSecond, maxAccelerationMetersPerSecond
+          "Star", maxVelocityMetersPerSecond, maxAccelerationMetersPerSecond
           );
     PathPlannerTrajectory square =
         PathPlanner.loadPath(
@@ -41,8 +43,8 @@ public class AutoCommand extends SequentialCommandGroup {
     addCommands(
       new FollowTrajectoryCommand(triangle, driveSubsystem),
       new ParallelCommandGroup(
-        new ArmOtherCommand(armSubsystem,.5),
-        new FollowerTrajectorycommand(star, driveSubsystem), 
+        new ArmTimedCommand(armSubsystem,.5, 2),
+        new FollowerTrajectorycommand(star, driveSubsystem) 
       ),
       new WaitCommand (2),
       new FollowTrajectoryCommand(square, driveSubsystem),
